@@ -1,0 +1,20 @@
+{
+  "version": "1.0.0",
+  "id": "@shopgate-project/tablet-adjustments",
+  "components": [
+    {
+      "id": "ProductItemPrice",
+      "path": "frontend/portals/Media/index.jsx",
+      "target": "component.product-media-section",
+      "type": "portals"
+    },
+    {
+      "id": "ProductHeader",
+      "path": "frontend/portals/ProductHeader/index.jsx",
+      "target": "product.header",
+      "type": "portals"
+    }
+  ],
+  "configuration": {
+  }
+}
