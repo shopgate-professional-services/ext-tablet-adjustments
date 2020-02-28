@@ -7,18 +7,22 @@ import connect from '../connector';
 
 const styles = {
   container: css({
-    display: 'flex',
-    alignItems: 'center',
-    '> div': {
-      width: '50%',
+    '@media only screen and (min-width: 640px)': {
+      display: 'flex',
+      alignItems: 'center',
       '> div': {
-        // remove border top from gmd
-        borderTop: 'none',
+        width: '50%',
+        '> div': {
+          // remove border top from gmd
+          borderTop: 'none',
+        },
       },
     },
   }),
   swiper: css({
-    width: '50vw',
+    '@media only screen and (min-width: 640px)': {
+      width: '50vw',
+    },
   }).toString(),
 };
 
