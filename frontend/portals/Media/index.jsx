@@ -8,6 +8,7 @@ import connect from '../connector';
 const styles = {
   container: css({
     '@media only screen and (min-width: 640px)': {
+      marginBottom: 10,
       display: 'flex',
       alignItems: 'center',
       '> div': {
