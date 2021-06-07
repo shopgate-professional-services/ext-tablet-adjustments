@@ -1,9 +1,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { css } from 'glamor';
-import { useTheme } from '@shopgate/engage/core';
+import { useTheme, withCurrentProduct } from '@shopgate/engage/core';
+import { ProductContext } from '@shopgate/engage/product';
 import MediaColumnContext from '../MediaColumnContext';
-import connect from '../connector';
+import connectIsTablet from '../connector';
+import AddToCartButton from './components/AddToCartButton';
+import AddToFavlist from './components/AddToFavlist';
+import { colorPdpBox } from '../../config';
 
 const styles = {
   container: css({
@@ -25,7 +29,35 @@ const styles = {
       width: '50vw',
     },
   }).toString(),
+  ctaWrapper: css({
+    padding: 16,
+    backgroundColor: colorPdpBox,
+  }).toString(),
+  rightBox: css({
+    padding: '0 32px',
+  }).toString(),
 };
+
+css.global('.tablet-right-column .theme__product__header__product-info', {
+  flexDirection: 'column',
+  alignItems: 'flex-start',
+  marginTop: 10,
+});
+css.global('.tablet-right-column .theme__product__header', {
+  backgroundColor: colorPdpBox,
+});
+css.global('.tablet-right-column .theme__product__header__product-info__row2', {
+  marginLeft: 0,
+  marginTop: 10,
+  display: 'flex',
+  flexDirection: 'column',
+  alignItems: 'flex-start',
+  width: '100%',
+  paddingRight: 16,
+});
+css.global('.tablet-right-column .price ui-shared__price', {
+  fontSize: '1.7rem',
+});
 
 /**
  * Media component
@@ -43,9 +75,31 @@ const Media = ({ children, isTablet }) => {
       <div>
         {React.cloneElement(children, { className: styles.swiper })}
       </div>
-      <div>
+      <div className={styles.rightBox}>
         <MediaColumnContext.Provider value={{ isMediaPosition: true }}>
-          <ProductHeader />
+          <div className="tablet-right-column">
+            <ProductHeader />
+          </div>
+          <ProductContext.Consumer>
+            {({
+              conditioner,
+              options,
+              productId,
+              variantId,
+            }) => (
+              <div className={styles.ctaWrapper}>
+                <AddToCartButton
+                  conditioner={conditioner}
+                  options={options}
+                  productId={variantId || productId}
+                />
+                <AddToFavlist
+                  productId={productId}
+                />
+              </div>
+            )}
+          </ProductContext.Consumer>
+
         </MediaColumnContext.Provider>
       </div>
     </div>
@@ -62,4 +116,4 @@ Media.defaultProps = {
   children: null,
 };
 
-export default connect(Media);
+export default connectIsTablet(withCurrentProduct(Media));
