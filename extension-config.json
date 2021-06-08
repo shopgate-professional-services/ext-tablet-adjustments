@@ -1,5 +1,5 @@
 {
-  "version": "1.2.0-rc.1",
+  "version": "1.2.0",
   "id": "@shopgate-project/tablet-adjustments",
   "components": [
     {
@@ -34,7 +34,7 @@
     "colorPdpBox": {
       "type": "admin",
       "destination": "frontend",
-      "default": "#c3ddfd",
+      "default": "",
       "params": {
         "type": "text" ,
         "label": "Background color of the right box on PDP"

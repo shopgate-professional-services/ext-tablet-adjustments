@@ -31,7 +31,7 @@ const styles = {
   }).toString(),
   ctaWrapper: css({
     padding: 16,
-    backgroundColor: colorPdpBox,
+    ...(colorPdpBox && { backgroundColor: colorPdpBox }),
   }).toString(),
   rightBox: css({
     padding: '0 32px',
@@ -44,7 +44,7 @@ css.global('.tablet-right-column .theme__product__header__product-info', {
   marginTop: 10,
 });
 css.global('.tablet-right-column .theme__product__header', {
-  backgroundColor: colorPdpBox,
+  ...(colorPdpBox && { backgroundColor: colorPdpBox }),
 });
 css.global('.tablet-right-column .theme__product__header__product-info__row2', {
   marginLeft: 0,

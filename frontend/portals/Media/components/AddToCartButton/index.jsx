@@ -20,11 +20,9 @@ class AddToCartButton extends PureComponent {
     loading: PropTypes.bool.isRequired,
     options: PropTypes.shape().isRequired,
     productId: PropTypes.string.isRequired,
-    onReset: PropTypes.func,
   }
 
   static defaultProps = {
-    onReset: () => { },
   }
 
   static contextTypes = {
@@ -102,15 +100,7 @@ class AddToCartButton extends PureComponent {
    * Adds a new product to cart or opens the cart if it already has products in it.
    */
   handleClick = () => {
-    const {
-      onReset,
-    } = this.props;
-
     this.handleAddToCart();
-    setTimeout(() => {
-      // Take care that the reset happens after the addToCart request was dispatched.
-      onReset();
-    }, 0);
   }
 
   /**
@@ -170,7 +160,7 @@ class AddToCartButton extends PureComponent {
         className={`${className} theme__product__add-to-cart-bar__add-to-cart-button`}
         data-test-id="addToCartBarButton"
         aria-label="product.add_to_cart"
-        onClick={this.handleClick}
+        onClick={this.handleAddToCart}
       >
         <I18n.Text string="product.add_to_cart" />
         {this.props.loading &&
