@@ -38,6 +38,10 @@ const styles = {
   }).toString(),
 };
 
+css.global('.upselling-pdp-sheet', {
+  marginBottom: '0 !important',
+});
+
 css.global('.tablet-right-column .theme__product__header__product-info', {
   flexDirection: 'column',
   alignItems: 'flex-start',
