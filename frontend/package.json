@@ -51,6 +51,6 @@
     "reselect": "^3.0.1"
   },
   "peerDependencies": {
-    "@shopgate/engage": "^6.12.0"
+    "@shopgate/engage": "^6.15.0"
   }
 }

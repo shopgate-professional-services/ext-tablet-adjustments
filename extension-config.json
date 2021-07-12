@@ -1,5 +1,5 @@
 {
-  "version": "1.1.1",
+  "version": "1.2.0",
   "id": "@shopgate-project/tablet-adjustments",
   "components": [
     {
@@ -13,8 +13,32 @@
       "path": "frontend/portals/ProductHeader/index.jsx",
       "target": "product.header",
       "type": "portals"
+    },
+    {
+      "id": "PaymentBar",
+      "path": "frontend/portals/PaymentBar/index.jsx",
+      "target": "cart.payment-bar",
+      "type": "portals"
+    },
+    {
+      "id": "Nullify",
+      "path": "frontend/portals/Nullify/index.jsx",
+      "target": [
+        "product.add-to-cart-bar",
+        "product.ctas.favorites"
+      ],
+      "type": "portals"
     }
   ],
   "configuration": {
+    "colorPdpBox": {
+      "type": "admin",
+      "destination": "frontend",
+      "default": "",
+      "params": {
+        "type": "text" ,
+        "label": "Background color of the right box on PDP"
+      }
+    }
   }
 }
