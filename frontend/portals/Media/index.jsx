@@ -3,6 +3,8 @@ import PropTypes from 'prop-types';
 import { css } from 'glamor';
 import { useTheme, withCurrentProduct } from '@shopgate/engage/core';
 import { ProductContext } from '@shopgate/engage/product';
+import ProductUnitQuantityPicker
+  from '@shopgate/engage/product/components/UnitQuantityPicker/ProductUnitQuantityPicker';
 import MediaColumnContext from '../MediaColumnContext';
 import connectIsTablet from '../connector';
 import AddToCartButton from './components/AddToCartButton';
@@ -92,6 +94,10 @@ const Media = ({ children, isTablet }) => {
               variantId,
             }) => (
               <div className={styles.ctaWrapper}>
+                <ProductUnitQuantityPicker
+                  productId={productId || variantId}
+                  variantId={variantId || productId}
+                />
                 <AddToCartButton
                   conditioner={conditioner}
                   options={options}
