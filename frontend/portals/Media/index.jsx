@@ -57,7 +57,7 @@ css.global('.tablet-right-column .theme__product__header__product-info__row2', {
   flexDirection: 'column',
   alignItems: 'flex-end',
   width: '100%',
-  paddingRight: 16,
+  paddingRight: 10,
 });
 css.global('.tablet-right-column .price ui-shared__price', {
   fontSize: '1.7rem',

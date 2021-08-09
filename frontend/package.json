@@ -1,6 +1,6 @@
 {
   "name": "@shopgate-project/tablet-adjustments",
-  "version": "1.2.1",
+  "version": "1.3.0",
   "description": "UI adjustments for tablets",
   "license": "Apache-2.0",
   "scripts": {
@@ -51,6 +51,6 @@
     "reselect": "^3.0.1"
   },
   "peerDependencies": {
-    "@shopgate/engage": "^6.15.0"
+    "@shopgate/engage": "^6.16.2"
   }
 }
