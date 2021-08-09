@@ -99,7 +99,6 @@ const Media = ({ children, isTablet }) => {
                 <ProductUnitQuantityPicker>
                   <OrderQuantityHint
                     productId={variantId || productId}
-                    className={styles.quantityHint}
                   />
                 </ProductUnitQuantityPicker>
                 <AddToCartButton
