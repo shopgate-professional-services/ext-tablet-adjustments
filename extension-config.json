@@ -9,9 +9,12 @@
       "type": "portals"
     },
     {
-      "id": "ProductHeader",
-      "path": "frontend/portals/ProductHeader/index.jsx",
-      "target": "product.header",
+      "id": "NullifyWithMediaContext",
+      "path": "frontend/portals/NullifyWithMediaContext/index.jsx",
+      "target": [
+        "product.header",
+        "product.unit-quantity-picker"
+      ],
       "type": "portals"
     },
     {

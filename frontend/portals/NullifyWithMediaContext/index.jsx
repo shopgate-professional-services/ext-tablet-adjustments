@@ -4,10 +4,10 @@ import MediaColumnContext from '../MediaColumnContext';
 import connect from '../connector';
 
 /**
- * ProductHeader component
+ * NullifyWithMediaContext component
  * @return {JSX}
  */
-const ProductHeader = ({ children, isTablet }) => {
+const NullifyWithMediaContext = ({ children, isTablet }) => {
   if (!isTablet) {
     return children;
   }
@@ -25,14 +25,14 @@ const ProductHeader = ({ children, isTablet }) => {
   );
 };
 
-ProductHeader.propTypes = {
+NullifyWithMediaContext.propTypes = {
   children: PropTypes.node,
   isTablet: PropTypes.bool,
 };
 
-ProductHeader.defaultProps = {
+NullifyWithMediaContext.defaultProps = {
   isTablet: false,
   children: null,
 };
 
-export default connect(ProductHeader);
+export default connect(NullifyWithMediaContext);
