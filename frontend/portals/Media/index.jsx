@@ -5,6 +5,8 @@ import { useTheme, withCurrentProduct } from '@shopgate/engage/core';
 import { ProductContext } from '@shopgate/engage/product';
 import ProductUnitQuantityPicker
   from '@shopgate/engage/product/components/UnitQuantityPicker/ProductUnitQuantityPicker';
+import OrderQuantityHint
+  from '@shopgate/engage/product/components/OrderQuantityHint';
 import MediaColumnContext from '../MediaColumnContext';
 import connectIsTablet from '../connector';
 import AddToCartButton from './components/AddToCartButton';
@@ -94,10 +96,12 @@ const Media = ({ children, isTablet }) => {
               variantId,
             }) => (
               <div className={styles.ctaWrapper}>
-                <ProductUnitQuantityPicker
-                  productId={productId || variantId}
-                  variantId={variantId || productId}
-                />
+                <ProductUnitQuantityPicker>
+                  <OrderQuantityHint
+                    productId={variantId || productId}
+                    className={styles.quantityHint}
+                  />
+                </ProductUnitQuantityPicker>
                 <AddToCartButton
                   conditioner={conditioner}
                   options={options}
