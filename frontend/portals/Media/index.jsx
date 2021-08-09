@@ -57,7 +57,7 @@ css.global('.tablet-right-column .theme__product__header__product-info__row2', {
   marginTop: 10,
   display: 'flex',
   flexDirection: 'column',
-  alignItems: 'flex-start',
+  alignItems: 'flex-end',
   width: '100%',
   paddingRight: 16,
 });
