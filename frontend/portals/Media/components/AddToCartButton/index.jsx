@@ -4,6 +4,7 @@ import { css } from 'glamor';
 import I18n from '@shopgate/pwa-common/components/I18n';
 import { broadcastLiveMessage } from '@shopgate/engage/a11y';
 import { IndicatorCircle, RippleButton, TickIcon } from '@shopgate/engage/components';
+import { ProductContext } from '@shopgate/engage/product';
 import cartButtonStyles from '@shopgate/pwa-ui-shared/AddToCartButton/style';
 import { themeConfig } from '@shopgate/pwa-common/helpers/config';
 import connect from './connector';
@@ -25,9 +26,7 @@ class AddToCartButton extends PureComponent {
   static defaultProps = {
   }
 
-  static contextTypes = {
-    i18n: PropTypes.func,
-  };
+  static contextType = ProductContext;
 
   /**
    * Constructor.
