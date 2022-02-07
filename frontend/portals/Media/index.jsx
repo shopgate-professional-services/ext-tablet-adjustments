@@ -30,7 +30,9 @@ const styles = {
   }),
   swiper: css({
     '@media only screen and (min-width: 640px)': {
-      width: '50vw',
+      '&& .common__swiper': {
+        width: '50vw',
+      },
     },
   }).toString(),
   ctaWrapper: css({
