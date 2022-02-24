@@ -74,7 +74,7 @@ css.global('.tablet-right-column .price ui-shared__price', {
   fontSize: '1.7rem',
 });
 
-const NATIVE_SHARE_BUTTON = 'product.tablet.right-column.ctas';
+const PRODUCT_TABLET_RIGHT_COLUMN_CTAS = 'product.tablet.right-column.ctas';
 
 /**
  * Media component
@@ -119,7 +119,7 @@ const Media = ({ children, isTablet }) => {
                   <AddToFavlist
                     productId={productId}
                   />
-                  <Portal name={NATIVE_SHARE_BUTTON} />
+                  <Portal name={PRODUCT_TABLET_RIGHT_COLUMN_CTAS} />
                 </div>
               </div>
             )}
