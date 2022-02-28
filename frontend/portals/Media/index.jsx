@@ -7,6 +7,7 @@ import ProductUnitQuantityPicker
   from '@shopgate/engage/product/components/UnitQuantityPicker/ProductUnitQuantityPicker';
 import OrderQuantityHint
   from '@shopgate/engage/product/components/OrderQuantityHint';
+import { Portal } from '@shopgate/engage/components';
 import MediaColumnContext from '../MediaColumnContext';
 import connectIsTablet from '../connector';
 import AddToCartButton from './components/AddToCartButton';
@@ -39,6 +40,10 @@ const styles = {
     padding: 16,
     ...(colorPdpBox && { backgroundColor: colorPdpBox }),
   }).toString(),
+  ctaWrapperInner: css({
+    display: 'flex',
+    alignItems: 'center',
+  }).toString(),
   rightBox: css({
     padding: '0 32px',
   }).toString(),
@@ -68,6 +73,8 @@ css.global('.tablet-right-column .theme__product__header__product-info__row2', {
 css.global('.tablet-right-column .price ui-shared__price', {
   fontSize: '1.7rem',
 });
+
+const PRODUCT_TABLET_RIGHT_COLUMN_CTAS = 'product.tablet.right-column.ctas';
 
 /**
  * Media component
@@ -108,9 +115,12 @@ const Media = ({ children, isTablet }) => {
                   options={options}
                   productId={variantId || productId}
                 />
-                <AddToFavlist
-                  productId={productId}
-                />
+                <div className={styles.ctaWrapperInner}>
+                  <AddToFavlist
+                    productId={productId}
+                  />
+                  <Portal name={PRODUCT_TABLET_RIGHT_COLUMN_CTAS} />
+                </div>
               </div>
             )}
           </ProductContext.Consumer>
