@@ -41,8 +41,12 @@ const styles = {
     ...(colorPdpBox && { backgroundColor: colorPdpBox }),
   }).toString(),
   ctaWrapperInner: css({
+    minHeight: '52px',
     display: 'flex',
-    alignItems: 'center',
+    alignItems: 'stretch',
+    '@media only screen and (max-width: 786px)': {
+      flexDirection: 'column',
+    },
   }).toString(),
   rightBox: css({
     padding: '0 32px',
