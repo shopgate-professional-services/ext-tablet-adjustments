@@ -3,11 +3,9 @@ import PropTypes from 'prop-types';
 import { css } from 'glamor';
 import { useTheme, withCurrentProduct } from '@shopgate/engage/core';
 import { ProductContext } from '@shopgate/engage/product';
-import ProductUnitQuantityPicker
-  from '@shopgate/engage/product/components/UnitQuantityPicker/ProductUnitQuantityPicker';
-import OrderQuantityHint
-  from '@shopgate/engage/product/components/OrderQuantityHint';
-import { Portal } from '@shopgate/engage/components';
+import ProductUnitQuantityPicker from '@shopgate/engage/product/components/UnitQuantityPicker/ProductUnitQuantityPicker';
+import OrderQuantityHint from '@shopgate/engage/product/components/OrderQuantityHint';
+import { Portal, SurroundPortals } from '@shopgate/engage/components';
 import MediaColumnContext from '../MediaColumnContext';
 import connectIsTablet from '../connector';
 import AddToCartButton from './components/AddToCartButton';
@@ -83,66 +81,74 @@ const PRODUCT_TABLET_RIGHT_COLUMN_CTAS = 'product.tablet.right-column.ctas';
 /**
  * Media component
  * @return {JSX}
+ * @param {Object} props for the component
  */
-const Media = ({ children, isTablet }) => {
-  if (!isTablet) {
-    return children;
-  }
-
+const Media = (props) => {
+  const { children, isTablet } = props;
   const { ProductHeader } = useTheme();
-
   return (
-    <div className={styles.container}>
-      <div>
-        {React.cloneElement(children, { className: styles.swiper })}
-      </div>
-      <div className={styles.rightBox}>
-        <MediaColumnContext.Provider value={{ isMediaPosition: true }}>
-          <div className="tablet-right-column">
-            <ProductHeader />
+    <SurroundPortals portalName="component.product-media-section.tablet-adjustments" portalProps={props}>
+      {!isTablet ?
+        <>
+          {children}
+        </> :
+        <div className={styles.container}>
+          <div>
+            {React.cloneElement(children, { className: styles.swiper })}
           </div>
-          <ProductContext.Consumer>
-            {({
-              conditioner,
-              options,
-              productId,
-              variantId,
-            }) => (
-              <div className={styles.ctaWrapper}>
-                <ProductUnitQuantityPicker>
-                  <OrderQuantityHint
-                    productId={variantId || productId}
-                  />
-                </ProductUnitQuantityPicker>
-                <AddToCartButton
-                  conditioner={conditioner}
-                  options={options}
-                  productId={variantId || productId}
-                />
-                <div className={styles.ctaWrapperInner}>
-                  <AddToFavlist
-                    productId={productId}
-                  />
-                  <Portal name={PRODUCT_TABLET_RIGHT_COLUMN_CTAS} />
-                </div>
+          <div className={styles.rightBox}>
+            <MediaColumnContext.Provider value={{ isMediaPosition: true }}>
+              <div className="tablet-right-column">
+                <ProductHeader />
               </div>
-            )}
-          </ProductContext.Consumer>
+              <ProductContext.Consumer>
+                {({
+                  conditioner,
+                  options,
+                  productId,
+                  variantId,
+                }) => (
+                  <div className={styles.ctaWrapper}>
+                    <ProductUnitQuantityPicker>
+                      <OrderQuantityHint
+                        productId={variantId || productId}
+                      />
+                    </ProductUnitQuantityPicker>
+                    <AddToCartButton
+                      conditioner={conditioner}
+                      options={options}
+                      productId={variantId || productId}
+                    />
+                    <div className={styles.ctaWrapperInner}>
+                      <AddToFavlist
+                        productId={productId}
+                      />
+                      <Portal name={PRODUCT_TABLET_RIGHT_COLUMN_CTAS} />
+                    </div>
+                  </div>
+                )}
+              </ProductContext.Consumer>
 
-        </MediaColumnContext.Provider>
-      </div>
-    </div>
+            </MediaColumnContext.Provider>
+          </div>
+        </div>
+      }
+    </SurroundPortals>
   );
 };
 
 Media.propTypes = {
-  children: PropTypes.node,
+  props: PropTypes.shape({
+    isTablet: PropTypes.bool,
+    children: PropTypes.element,
+  }).isRequired,
+  children: PropTypes.element,
   isTablet: PropTypes.bool,
 };
 
 Media.defaultProps = {
-  isTablet: false,
   children: null,
+  isTablet: false,
 };
 
 export default connectIsTablet(withCurrentProduct(Media));
