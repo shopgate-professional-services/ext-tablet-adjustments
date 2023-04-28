@@ -15,7 +15,6 @@ import { colorPdpBox } from '../../config';
 const styles = {
   container: css({
     '@media only screen and (min-width: 640px)': {
-      marginBottom: 10,
       display: 'flex',
       alignItems: 'center',
       '> div': {
