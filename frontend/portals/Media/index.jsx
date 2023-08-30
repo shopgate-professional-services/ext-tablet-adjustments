@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import { css } from 'glamor';
 import { useTheme, withCurrentProduct } from '@shopgate/engage/core';
@@ -117,17 +117,23 @@ const Media = ({ children, isTablet }) => {
                     productId={variantId || productId}
                   />
                 </ProductUnitQuantityPicker>
-                <Fragment>
-                  <Portal name={PRODUCT_TABLET_RIGHT_COLUMN_ADD_TO_CART_BEFORE} props={null} />
-                  <Portal name={PRODUCT_TABLET_RIGHT_COLUMN_ADD_TO_CART} props={null}>
-                    <AddToCartButton
-                      conditioner={conditioner}
-                      options={options}
-                      productId={variantId || productId}
-                    />
-                  </Portal>
-                  <Portal name={PRODUCT_TABLET_RIGHT_COLUMN_ADD_TO_CART_AFTER} props={null} />
-                </Fragment>
+                <Portal name={PRODUCT_TABLET_RIGHT_COLUMN_ADD_TO_CART_BEFORE} props={null} />
+                <Portal
+                  name={PRODUCT_TABLET_RIGHT_COLUMN_ADD_TO_CART}
+                  props={{
+                    conditioner,
+                    options,
+                    variantId,
+                    productId,
+                  }}
+                >
+                  <AddToCartButton
+                    conditioner={conditioner}
+                    options={options}
+                    productId={variantId || productId}
+                  />
+                </Portal>
+                <Portal name={PRODUCT_TABLET_RIGHT_COLUMN_ADD_TO_CART_AFTER} props={null} />
                 <div className={styles.ctaWrapperInner}>
                   <AddToFavlist
                     productId={productId}
