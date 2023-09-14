@@ -79,6 +79,9 @@ css.global('.tablet-right-column .price ui-shared__price', {
 });
 
 const PRODUCT_TABLET_RIGHT_COLUMN_CTAS = 'product.tablet.right-column.ctas';
+const PRODUCT_TABLET_RIGHT_COLUMN_ADD_TO_CART_BEFORE = 'product.tablet.right-column.add-to-cart.before';
+const PRODUCT_TABLET_RIGHT_COLUMN_ADD_TO_CART = 'product.tablet.right-column.add-to-cart';
+const PRODUCT_TABLET_RIGHT_COLUMN_ADD_TO_CART_AFTER = 'product.tablet.right-column.add-to-cart.after';
 
 /**
  * Media component
@@ -114,11 +117,23 @@ const Media = ({ children, isTablet }) => {
                     productId={variantId || productId}
                   />
                 </ProductUnitQuantityPicker>
-                <AddToCartButton
-                  conditioner={conditioner}
-                  options={options}
-                  productId={variantId || productId}
-                />
+                <Portal name={PRODUCT_TABLET_RIGHT_COLUMN_ADD_TO_CART_BEFORE} props={null} />
+                <Portal
+                  name={PRODUCT_TABLET_RIGHT_COLUMN_ADD_TO_CART}
+                  props={{
+                    conditioner,
+                    options,
+                    variantId,
+                    productId,
+                  }}
+                >
+                  <AddToCartButton
+                    conditioner={conditioner}
+                    options={options}
+                    productId={variantId || productId}
+                  />
+                </Portal>
+                <Portal name={PRODUCT_TABLET_RIGHT_COLUMN_ADD_TO_CART_AFTER} props={null} />
                 <div className={styles.ctaWrapperInner}>
                   <AddToFavlist
                     productId={productId}
