@@ -59,6 +59,15 @@ css.global('.tablet-right-column .theme__product__header__product-info', {
   alignItems: 'flex-start',
   marginTop: 10,
 });
+
+css.global('.tablet-right-column', {
+  minHeight: 160,
+});
+
+css.global('.tablet-right-column > div', {
+  borderTop: 'none',
+});
+
 css.global('.tablet-right-column .theme__product__header', {
   ...(colorPdpBox && { backgroundColor: colorPdpBox }),
 });
@@ -76,6 +85,7 @@ css.global('.tablet-right-column .price ui-shared__price', {
 });
 
 const PRODUCT_TABLET_RIGHT_COLUMN_CTAS = 'product.tablet.right-column.ctas';
+const PRODUCT_TABLET_RIGHT_COLUMN = 'product.tablet.right-column';
 
 /**
  * Media component
@@ -96,39 +106,41 @@ const Media = (props) => {
             {React.cloneElement(children, { className: styles.swiper })}
           </div>
           <div className={styles.rightBox}>
-            <MediaColumnContext.Provider value={{ isMediaPosition: true }}>
-              <div className="tablet-right-column">
-                <ProductHeader />
-              </div>
-              <ProductContext.Consumer>
-                {({
-                  conditioner,
-                  options,
-                  productId,
-                  variantId,
-                }) => (
-                  <div className={styles.ctaWrapper}>
-                    <ProductUnitQuantityPicker>
-                      <OrderQuantityHint
+            <SurroundPortals portalName={PRODUCT_TABLET_RIGHT_COLUMN}>
+              <MediaColumnContext.Provider value={{ isMediaPosition: true }}>
+                <div className="tablet-right-column">
+                  <ProductHeader />
+                </div>
+                <ProductContext.Consumer>
+                  {({
+                    conditioner,
+                    options,
+                    productId,
+                    variantId,
+                  }) => (
+                    <div className={styles.ctaWrapper}>
+                      <ProductUnitQuantityPicker>
+                        <OrderQuantityHint
+                          productId={variantId || productId}
+                        />
+                      </ProductUnitQuantityPicker>
+                      <AddToCartButton
+                        conditioner={conditioner}
+                        options={options}
                         productId={variantId || productId}
                       />
-                    </ProductUnitQuantityPicker>
-                    <AddToCartButton
-                      conditioner={conditioner}
-                      options={options}
-                      productId={variantId || productId}
-                    />
-                    <div className={styles.ctaWrapperInner}>
-                      <AddToFavlist
-                        productId={productId}
-                      />
-                      <Portal name={PRODUCT_TABLET_RIGHT_COLUMN_CTAS} />
+                      <div className={styles.ctaWrapperInner}>
+                        <AddToFavlist
+                          productId={productId}
+                        />
+                        <Portal name={PRODUCT_TABLET_RIGHT_COLUMN_CTAS} />
+                      </div>
                     </div>
-                  </div>
-                )}
-              </ProductContext.Consumer>
+                  )}
+                </ProductContext.Consumer>
 
-            </MediaColumnContext.Provider>
+              </MediaColumnContext.Provider>
+            </SurroundPortals>
           </div>
         </div>
       }
@@ -137,10 +149,6 @@ const Media = (props) => {
 };
 
 Media.propTypes = {
-  props: PropTypes.shape({
-    isTablet: PropTypes.bool,
-    children: PropTypes.element,
-  }).isRequired,
   children: PropTypes.element,
   isTablet: PropTypes.bool,
 };
