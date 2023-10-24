@@ -55,13 +55,7 @@ css.global('.upselling-pdp-sheet', {
 });
 
 css.global('.tablet-right-column .theme__product__header__product-info', {
-  flexDirection: 'column',
-  alignItems: 'flex-start',
-  marginTop: 10,
-});
-
-css.global('.tablet-right-column', {
-  minHeight: 160,
+  minHeight: 100,
 });
 
 css.global('.tablet-right-column > div', {
@@ -72,13 +66,9 @@ css.global('.tablet-right-column .theme__product__header', {
   ...(colorPdpBox && { backgroundColor: colorPdpBox }),
 });
 css.global('.tablet-right-column .theme__product__header__product-info__row2', {
-  marginLeft: 0,
-  marginTop: 10,
   display: 'flex',
   flexDirection: 'column',
-  alignItems: 'flex-end',
-  width: '100%',
-  paddingRight: 10,
+  justifyContent: 'flex-end',
 });
 css.global('.tablet-right-column .price ui-shared__price', {
   fontSize: '1.7rem',
