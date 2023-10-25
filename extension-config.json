@@ -39,7 +39,6 @@
       "destination": "frontend",
       "default": "",
       "params": {
-        "type": "text",
         "label": "Background color of the right box on PDP"
       }
     }
