@@ -16,7 +16,7 @@ import styles from './style';
 class AddToCartButton extends PureComponent {
   static propTypes = {
     addToCart: PropTypes.func.isRequired,
-    conditioner: PropTypes.func.isRequired,
+    conditioner: PropTypes.shape().isRequired,
     disabled: PropTypes.bool.isRequired,
     loading: PropTypes.bool.isRequired,
     options: PropTypes.shape().isRequired,

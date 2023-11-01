@@ -1,5 +1,6 @@
 {
   "name": "@shopgate-project/tablet-adjustments",
+  "version": "1.4.0",
   "description": "UI adjustments for tablets",
   "license": "Apache-2.0",
   "scripts": {

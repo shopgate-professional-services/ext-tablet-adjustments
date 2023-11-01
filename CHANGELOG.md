@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/) and this project adheres to [Semantic Versioning](http://semver.org/).
 
+### 1.4.0 - 2023-11-01
+### Added
+- `component.product-media-section.tablet-adjustments` portal that can be used by extensions that usually use the `component.product-media-section` portal which is occupied by this extension
+
 ### [1.3.6] - 2023-06-13
 ### Added
 - Portal for add to cart button.

@@ -23,7 +23,7 @@ const rippleButton = css({
   fontSize: 18,
   fontWeight: 700,
   padding: '16px !important',
-});
+}).toString();
 
 const disabled = css(button, {
   background: colors.shade5,
