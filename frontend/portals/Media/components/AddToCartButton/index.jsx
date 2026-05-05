@@ -5,7 +5,6 @@ import I18n from '@shopgate/pwa-common/components/I18n';
 import { broadcastLiveMessage } from '@shopgate/engage/a11y';
 import { IndicatorCircle, RippleButton, TickIcon } from '@shopgate/engage/components';
 import { ProductContext } from '@shopgate/engage/product';
-import cartButtonStyles from '@shopgate/pwa-ui-shared/AddToCartButton/style';
 import { themeConfig } from '@shopgate/pwa-common/helpers/config';
 import connect from './connector';
 import styles from './style';
@@ -109,7 +108,7 @@ class AddToCartButton extends PureComponent {
   render() {
     const className = this.props.disabled ? styles.disabled : styles.button;
 
-    let tickIconStyle = `${cartButtonStyles.icon} ${css({
+    let tickIconStyle = `${styles.icon} ${css({
       top: 15,
       right: 16,
     })}`;
