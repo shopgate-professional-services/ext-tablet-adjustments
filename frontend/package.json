@@ -1,6 +1,6 @@
 {
   "name": "@shopgate-project/tablet-adjustments",
-  "version": "1.4.0",
+  "version": "1.4.2-beta.1",
   "description": "UI adjustments for tablets",
   "license": "Apache-2.0",
   "scripts": {
@@ -49,8 +49,5 @@
     "react-redux": "^5.0.6",
     "redux-mock-store": "^1.5.3",
     "reselect": "^3.0.1"
-  },
-  "peerDependencies": {
-    "@shopgate/engage": "^6.18.7"
   }
 }
