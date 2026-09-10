@@ -49,8 +49,5 @@
     "react-redux": "^5.0.6",
     "redux-mock-store": "^1.5.3",
     "reselect": "^3.0.1"
-  },
-  "peerDependencies": {
-    "@shopgate/engage": "^6.18.7"
   }
 }
