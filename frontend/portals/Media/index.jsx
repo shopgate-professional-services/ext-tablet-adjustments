@@ -10,6 +10,7 @@ import MediaColumnContext from '../MediaColumnContext';
 import connectIsTablet from '../connector';
 import AddToCartButton from './components/AddToCartButton';
 import AddToFavlist from './components/AddToFavlist';
+import ShareProduct from './components/ShareProduct';
 import { colorPdpBox } from '../../config';
 
 const styles = {
@@ -138,6 +139,7 @@ const Media = (props) => {
                         <AddToFavlist
                           productId={productId}
                         />
+                        <ShareProduct productId={variantId || productId} />
                         <Portal name={PRODUCT_TABLET_RIGHT_COLUMN_CTAS} />
                       </div>
                     </div>

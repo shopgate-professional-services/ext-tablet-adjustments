@@ -4,6 +4,13 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/) and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [1.5.0] 2026-10-06
+### Added
+- Share button in the right column next to the favorites button, using the share feature of the PWA core (PWA with `product.ctas.share`, CURB-5380). It follows the theme setting "Teilen-Button anzeigen" and replaces the tablet button of `@shopgate/pdp-native-share`.
+
+### Changed
+- The core share action button over the product image (`product.ctas.share`) is hidden on tablets.
+
 ## [1.4.2] 2026-09-16
 ### Removed
 - pwa peerDependencies version check
