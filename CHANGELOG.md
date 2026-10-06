@@ -11,6 +11,9 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/) and this p
 ### Changed
 - The core share action button over the product image (`product.ctas.share`) is hidden on tablets.
 
+### Migration
+- Remove `@shopgate/pdp-native-share` when the PWA with the core share button is deployed, otherwise two share buttons are shown on tablets.
+
 ## [1.4.2] 2026-09-16
 ### Removed
 - pwa peerDependencies version check

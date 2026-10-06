@@ -28,6 +28,7 @@
     "@shopgate/pwa-common-commerce": "^6.11.0",
     "@shopgate/pwa-core": "^6.11.0",
     "@shopgate/pwa-tracking": "^6.11.0",
+    "@shopgate/pwa-ui-ios": "^6.11.0",
     "@shopgate/pwa-ui-material": "^6.11.0",
     "@shopgate/pwa-ui-shared": "^6.11.0",
     "@shopgate/pwa-unit-test": "^6.11.0",
