@@ -18,12 +18,6 @@
       "type": "portals"
     },
     {
-      "id": "PaymentBar",
-      "path": "frontend/portals/PaymentBar/index.jsx",
-      "target": "cart.payment-bar",
-      "type": "portals"
-    },
-    {
       "id": "Nullify",
       "path": "frontend/portals/Nullify/index.jsx",
       "target": [

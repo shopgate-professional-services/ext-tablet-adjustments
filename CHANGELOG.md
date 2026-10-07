@@ -11,8 +11,12 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/) and this p
 ### Changed
 - The core share action button over the product image (`product.ctas.share`) is hidden on tablets.
 
+### Removed
+- The cart payment bar is no longer narrowed to the right half on tablets. The PWA core now lays out the cart bar itself, on top of the tab bar and optionally floating.
+
 ### Migration
 - Remove `@shopgate/pdp-native-share` when the PWA with the core share button is deployed, otherwise two share buttons are shown on tablets.
+- Deploy together with the PWA that shows the tab bar in the cart, otherwise the cart payment bar spans the full width on tablets again.
 
 ## [1.4.2] 2026-09-16
 ### Removed
