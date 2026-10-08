@@ -1,12 +1,15 @@
-import React from 'react';
 import PropTypes from 'prop-types';
-import connect from '../connector';
+import { useSelector } from 'react-redux';
+import { getIsTablet } from '../../selectors';
 
 /**
  * Nullify component
- * @return {JSX}
+ * @param {Object} props The component props.
+ * @returns {JSX|null}
  */
-const Nullify = ({ children, isTablet }) => {
+const Nullify = ({ children }) => {
+  const isTablet = useSelector(getIsTablet);
+
   if (isTablet) {
     return null;
   }
@@ -16,12 +19,10 @@ const Nullify = ({ children, isTablet }) => {
 
 Nullify.propTypes = {
   children: PropTypes.node,
-  isTablet: PropTypes.bool,
 };
 
 Nullify.defaultProps = {
-  isTablet: false,
   children: null,
 };
 
-export default connect(Nullify);
+export default Nullify;

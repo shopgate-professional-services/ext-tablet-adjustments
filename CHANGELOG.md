@@ -4,6 +4,14 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/) and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [2.0.0] - 2026-10-08
+### Changed
+- 🔥 Breaking change: the extension now requires PWA 7.33.0 or newer. All components are styled through `@shopgate/engage/styles` (`makeStyles`) with theme tokens (colors, border radius) instead of the static glamor styles and `themeConfig`, so the tablet layout follows the theme configuration of the shop (including the dark color scheme).
+- The portals and buttons are now function components that read their data via `useSelector`/`useDispatch` hooks instead of `connect`.
+
+### Removed
+- Removed the glamor styling, the `connect` connectors, the `.babelrc` and the unused jest setup.
+
 ## [1.5.0] 2026-10-06
 ### Added
 - Share button in the right column next to the favorites button, using the share feature of the PWA core (PWA with `product.ctas.share`, CURB-5380). It follows the theme setting "Teilen-Button anzeigen" and replaces the tablet button of `@shopgate/pdp-native-share`.
