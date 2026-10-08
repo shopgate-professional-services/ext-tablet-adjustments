@@ -1,20 +1,26 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { css } from 'glamor';
-import { useTheme, withCurrentProduct } from '@shopgate/engage/core';
+import { useSelector } from 'react-redux';
+import { withCurrentProduct } from '@shopgate/engage/core';
+import { useThemeComponents } from '@shopgate/engage/core/hooks';
 import { ProductContext } from '@shopgate/engage/product';
 import ProductUnitQuantityPicker from '@shopgate/engage/product/components/UnitQuantityPicker/ProductUnitQuantityPicker';
 import OrderQuantityHint from '@shopgate/engage/product/components/OrderQuantityHint';
 import { Portal, SurroundPortals } from '@shopgate/engage/components';
+import { makeStyles, injectGlobal } from '@shopgate/engage/styles';
 import MediaColumnContext from '../MediaColumnContext';
-import connectIsTablet from '../connector';
+import { getIsTablet } from '../../selectors';
 import AddToCartButton from './components/AddToCartButton';
 import AddToFavlist from './components/AddToFavlist';
 import ShareProduct from './components/ShareProduct';
-import { colorPdpBox } from '../../config';
+import config from '../../config.json';
 
-const styles = {
-  container: css({
+const { colorPdpBox } = config;
+
+const MEDIA_COLUMN_CONTEXT_VALUE = { isMediaPosition: true };
+
+const useStyles = makeStyles()({
+  container: {
     '@media only screen and (min-width: 640px)': {
       display: 'flex',
       alignItems: 'center',
@@ -26,82 +32,86 @@ const styles = {
         },
       },
     },
-  }),
-  swiper: css({
+  },
+  swiper: {
     '@media only screen and (min-width: 640px)': {
       '&& .common__swiper': {
         width: '50vw',
       },
     },
-  }).toString(),
-  ctaWrapper: css({
+  },
+  ctaWrapper: {
     padding: 16,
     ...(colorPdpBox && { backgroundColor: colorPdpBox }),
-  }).toString(),
-  ctaWrapperInner: css({
+  },
+  ctaWrapperInner: {
     minHeight: '52px',
     display: 'flex',
     alignItems: 'stretch',
     '@media only screen and (max-width: 786px)': {
       flexDirection: 'column',
     },
-  }).toString(),
-  rightBox: css({
+  },
+  rightBox: {
     padding: '0 32px',
-  }).toString(),
-};
-
-css.global('.upselling-pdp-sheet', {
-  marginBottom: '0 !important',
+  },
 });
 
-css.global('.tablet-right-column .theme__product__header__product-info', {
-  minHeight: 100,
-});
-
-css.global('.tablet-right-column > div', {
-  borderTop: 'none',
-});
-
-css.global('.tablet-right-column .theme__product__header', {
-  ...(colorPdpBox && { backgroundColor: colorPdpBox }),
-});
-css.global('.tablet-right-column .theme__product__header__product-info__row2', {
-  display: 'flex',
-  flexDirection: 'column',
-  justifyContent: 'flex-end',
-});
-css.global('.tablet-right-column .price ui-shared__price', {
-  fontSize: '1.7rem',
+injectGlobal({
+  '.upselling-pdp-sheet': {
+    marginBottom: '0 !important',
+  },
+  '.tablet-right-column .theme__product__header__product-info': {
+    minHeight: 100,
+  },
+  '.tablet-right-column > div': {
+    borderTop: 'none',
+  },
+  '.tablet-right-column .theme__product__header': {
+    ...(colorPdpBox && { backgroundColor: colorPdpBox }),
+  },
+  '.tablet-right-column .theme__product__header__product-info__row2': {
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'flex-end',
+  },
+  '.tablet-right-column .price .ui-shared__price': {
+    fontSize: '1.7rem',
+  },
 });
 
 const PRODUCT_TABLET_RIGHT_COLUMN_CTAS = 'product.tablet.right-column.ctas';
 const PRODUCT_TABLET_RIGHT_COLUMN = 'product.tablet.right-column';
-const PRODUCT_TABLET_RIGHT_COLUMN_ADD_TO_CART_BEFORE = 'product.tablet.right-column.add-to-cart.before';
-const PRODUCT_TABLET_RIGHT_COLUMN_ADD_TO_CART = 'product.tablet.right-column.add-to-cart';
-const PRODUCT_TABLET_RIGHT_COLUMN_ADD_TO_CART_AFTER = 'product.tablet.right-column.add-to-cart.after';
+const ADD_TO_CART_BEFORE = 'product.tablet.right-column.add-to-cart.before';
+const ADD_TO_CART = 'product.tablet.right-column.add-to-cart';
+const ADD_TO_CART_AFTER = 'product.tablet.right-column.add-to-cart.after';
 
 /**
  * Media component
- * @return {JSX}
- * @param {Object} props for the component
+ * @param {Object} props The component props.
+ * @returns {JSX}
  */
 const Media = (props) => {
-  const { children, isTablet } = props;
-  const { ProductHeader } = useTheme();
+  const { children } = props;
+  const { classes } = useStyles();
+  const isTablet = useSelector(getIsTablet);
+  const { ProductHeader } = useThemeComponents();
+
   return (
-    <SurroundPortals portalName="component.product-media-section.tablet-adjustments" portalProps={props}>
-      {!isTablet ?
-        <>
-          {children}
-        </> :
-        <div className={styles.container}>
+    <SurroundPortals
+      portalName="component.product-media-section.tablet-adjustments"
+      portalProps={props}
+    >
+      {!isTablet ? (
+        children
+      ) : (
+        <div className={classes.container}>
           <div>
-            {React.cloneElement(children, { className: styles.swiper })}
+            {React.cloneElement(children, { className: classes.swiper })}
           </div>
-          <div className={styles.rightBox}>
+          <div className={classes.rightBox}>
             <SurroundPortals portalName={PRODUCT_TABLET_RIGHT_COLUMN}>
-              <MediaColumnContext.Provider value={{ isMediaPosition: true }}>
+              <MediaColumnContext.Provider value={MEDIA_COLUMN_CONTEXT_VALUE}>
                 <div className="tablet-right-column">
                   <ProductHeader />
                 </div>
@@ -112,15 +122,15 @@ const Media = (props) => {
                     productId,
                     variantId,
                   }) => (
-                    <div className={styles.ctaWrapper}>
+                    <div className={classes.ctaWrapper}>
                       <ProductUnitQuantityPicker>
                         <OrderQuantityHint
                           productId={variantId || productId}
                         />
                       </ProductUnitQuantityPicker>
-                      <Portal name={PRODUCT_TABLET_RIGHT_COLUMN_ADD_TO_CART_BEFORE} props={null} />
+                      <Portal name={ADD_TO_CART_BEFORE} props={null} />
                       <Portal
-                        name={PRODUCT_TABLET_RIGHT_COLUMN_ADD_TO_CART}
+                        name={ADD_TO_CART}
                         props={{
                           conditioner,
                           options,
@@ -134,8 +144,8 @@ const Media = (props) => {
                           productId={variantId || productId}
                         />
                       </Portal>
-                      <Portal name={PRODUCT_TABLET_RIGHT_COLUMN_ADD_TO_CART_AFTER} props={null} />
-                      <div className={styles.ctaWrapperInner}>
+                      <Portal name={ADD_TO_CART_AFTER} props={null} />
+                      <div className={classes.ctaWrapperInner}>
                         <AddToFavlist
                           productId={productId}
                         />
@@ -150,19 +160,17 @@ const Media = (props) => {
             </SurroundPortals>
           </div>
         </div>
-      }
+      )}
     </SurroundPortals>
   );
 };
 
 Media.propTypes = {
   children: PropTypes.element,
-  isTablet: PropTypes.bool,
 };
 
 Media.defaultProps = {
   children: null,
-  isTablet: false,
 };
 
-export default connectIsTablet(withCurrentProduct(Media));
+export default withCurrentProduct(Media);
