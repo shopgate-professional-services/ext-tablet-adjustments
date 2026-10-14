@@ -7,8 +7,8 @@
     "lint": "eslint --ignore-path ../.gitignore --ext .js --ext .jsx ."
   },
   "devDependencies": {
-    "@shopgate/engage": "^7.33.0",
-    "@shopgate/eslint-config": "^7.33.0",
+    "@shopgate/engage": "^7.33.2",
+    "@shopgate/eslint-config": "^7.33.2",
     "css-spring": "^4.1.0",
     "eslint": "^8.57.1",
     "prop-types": "^15.6.0",
@@ -18,6 +18,6 @@
     "reselect": "^4.1.8"
   },
   "peerDependencies": {
-    "@shopgate/engage": ">=7.33.0"
+    "@shopgate/engage": ">=7.33.2"
   }
 }

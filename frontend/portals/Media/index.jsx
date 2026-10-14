@@ -24,6 +24,7 @@ const useStyles = makeStyles()({
     '@media only screen and (min-width: 640px)': {
       display: 'flex',
       alignItems: 'center',
+      paddingBottom: 16,
       '> div': {
         width: '50%',
         '> div': {

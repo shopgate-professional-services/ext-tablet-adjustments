@@ -6,7 +6,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/) and this p
 
 ## [2.0.0] - 2026-10-08
 ### Changed
-- 🔥 Breaking change: the extension now requires PWA 7.33.0 or newer. All components are styled through `@shopgate/engage/styles` (`makeStyles`) with theme tokens (colors, border radius) instead of the static glamor styles and `themeConfig`, so the tablet layout follows the theme configuration of the shop (including the dark color scheme).
+- 🔥 Breaking change: the extension now requires PWA 7.33.2 or newer. All components are styled through `@shopgate/engage/styles` (`makeStyles`) with theme tokens (colors, border radius) instead of the static glamor styles and `themeConfig`, so the tablet layout follows the theme configuration of the shop (including the dark color scheme).
 - The portals and buttons are now function components that read their data via `useSelector`/`useDispatch` hooks instead of `connect`.
 
 ### Removed
