@@ -1,13 +1,17 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { useSelector } from 'react-redux';
 import MediaColumnContext from '../MediaColumnContext';
-import connect from '../connector';
+import { getIsTablet } from '../../selectors';
 
 /**
  * NullifyWithMediaContext component
- * @return {JSX}
+ * @param {Object} props The component props.
+ * @returns {JSX|null}
  */
-const NullifyWithMediaContext = ({ children, isTablet }) => {
+const NullifyWithMediaContext = ({ children }) => {
+  const isTablet = useSelector(getIsTablet);
+
   if (!isTablet) {
     return children;
   }
@@ -27,12 +31,10 @@ const NullifyWithMediaContext = ({ children, isTablet }) => {
 
 NullifyWithMediaContext.propTypes = {
   children: PropTypes.node,
-  isTablet: PropTypes.bool,
 };
 
 NullifyWithMediaContext.defaultProps = {
-  isTablet: false,
   children: null,
 };
 
-export default connect(NullifyWithMediaContext);
+export default NullifyWithMediaContext;
