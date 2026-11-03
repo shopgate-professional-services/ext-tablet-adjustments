@@ -1,181 +1,178 @@
-import React, { PureComponent } from 'react';
+import React, {
+  useCallback,
+  useContext,
+  useRef,
+  useState,
+} from 'react';
 import PropTypes from 'prop-types';
-import { css } from 'glamor';
-import I18n from '@shopgate/pwa-common/components/I18n';
+import { useSelector, useDispatch } from 'react-redux';
 import { broadcastLiveMessage } from '@shopgate/engage/a11y';
-import { IndicatorCircle, RippleButton, TickIcon } from '@shopgate/engage/components';
-import { ProductContext } from '@shopgate/engage/product';
-import { themeConfig } from '@shopgate/pwa-common/helpers/config';
-import connect from './connector';
-import styles from './style';
+import { I18n, IndicatorCircle, TickIcon } from '@shopgate/engage/components';
+import { Button } from '@shopgate/engage/components/v2';
+import { ProductContext, isProductOrderable, hasProductVariants } from '@shopgate/engage/product';
+import { isProductPageLoading } from '@shopgate/pwa-common-commerce/product/selectors/page';
+import { makeStyles, keyframes } from '@shopgate/engage/styles';
+import spring from 'css-spring';
+import { addProductToCart } from './actions';
+
+const CHECKMARK_HIDE_DELAY = 1100;
+const CHECKMARK_RESET_DELAY = 700;
+const CLICK_RESET_DELAY = 250;
+
+const springOptions = {
+  stiffness: 381.47,
+  damping: 15,
+};
+
+const springFromBottomKeyframes = keyframes(spring(
+  { transform: 'translate3d(0, -300%, 0)' },
+  { transform: 'translate3d(0, 0, 0)' },
+  springOptions
+));
+
+const springToBottomKeyframes = keyframes(spring(
+  { transform: 'translate3d(0, 0, 0)' },
+  { transform: 'translate3d(0, -300%, 0)' },
+  springOptions
+));
+
+const useStyles = makeStyles()({
+  button: {
+    fontSize: 18,
+    fontWeight: 700,
+    padding: '16px !important',
+    overflow: 'hidden',
+  },
+  icon: {
+    transition: 'opacity 450ms cubic-bezier(0.4, 0.0, 0.2, 1)',
+    opacity: 1,
+    position: 'absolute',
+  },
+  tickIcon: {
+    top: 15,
+    right: 16,
+  },
+  spinnerIcon: {
+    top: 12,
+    right: 16,
+    position: 'absolute',
+  },
+  springFromBottom: {
+    animation: `${springFromBottomKeyframes} 600ms`,
+  },
+  springToBottom: {
+    animation: `${springToBottomKeyframes} 600ms`,
+  },
+});
 
 /**
  * The AddToCartButton component.
+ * @param {Object} props The component props.
+ * @returns {JSX}
  */
-class AddToCartButton extends PureComponent {
-  static propTypes = {
-    addToCart: PropTypes.func.isRequired,
-    conditioner: PropTypes.shape().isRequired,
-    disabled: PropTypes.bool.isRequired,
-    loading: PropTypes.bool.isRequired,
-    options: PropTypes.shape().isRequired,
-    productId: PropTypes.string.isRequired,
-  }
+const AddToCartButton = ({ conditioner, options, productId }) => {
+  const { classes, cx, theme } = useStyles();
+  const dispatch = useDispatch();
+  const { quantity } = useContext(ProductContext);
 
-  static defaultProps = {
-  }
+  const disabled = useSelector(state => (
+    !isProductOrderable(state, { productId }) && !hasProductVariants(state, { productId })
+  ));
+  const loading = useSelector(state => isProductPageLoading(state, { productId }));
 
-  static contextType = ProductContext;
+  const [showCheckmark, setShowCheckmark] = useState(null);
+  const clicked = useRef(false);
 
-  /**
-   * Constructor.
-   * @param {Object} props The component props.
-   */
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      showCheckmark: null,
-    };
-  }
-
-  /**
-   * Handles the button click.
-   * Checks if the button can be clicked and if
-   * all criteria set by the conditioner are met.
-   */
-  handleAddToCart = () => {
-    if (this.state.clicked) {
+  const handleAddToCart = useCallback(() => {
+    if (clicked.current || loading || disabled) {
       return;
     }
 
-    if (this.props.loading || this.props.disabled) {
-      return;
-    }
-
-    this.props.conditioner.check().then((fullfilled) => {
-      if (!fullfilled) {
+    conditioner.check().then((fulfilled) => {
+      if (!fulfilled) {
         return;
       }
 
-      this.setState({
-        clicked: true,
-        showCheckmark: true,
-      });
+      clicked.current = true;
+      setShowCheckmark(true);
 
       setTimeout(() => {
-        // return;
-        this.setState({
-          showCheckmark: false,
-        });
+        setShowCheckmark(false);
+        setTimeout(() => setShowCheckmark(null), CHECKMARK_RESET_DELAY);
+      }, CHECKMARK_HIDE_DELAY);
 
-        setTimeout(() => {
-          this.setState({
-            showCheckmark: null,
-          });
-        }, 700);
-      }, 1100);
-
-      this.props.addToCart({
-        productId: this.props.productId,
-        options: this.props.options,
-        quantity: this.context.quantity,
-      });
+      dispatch(addProductToCart({
+        productId,
+        options,
+        quantity,
+      }));
 
       broadcastLiveMessage('product.adding_item', {
-        params: { count: this.context.quantity },
+        params: { count: quantity },
       });
 
       setTimeout(() => {
-        this.setState({
-          clicked: false,
-        });
-      }, 250);
+        clicked.current = false;
+      }, CLICK_RESET_DELAY);
     });
-  }
+  }, [loading, disabled, conditioner, dispatch, productId, options, quantity]);
 
-  /**
-   * Adds a new product to cart or opens the cart if it already has products in it.
-   */
-  handleClick = () => {
-    this.handleAddToCart();
-  }
+  const iconOpacity = loading ? { opacity: 0 } : { opacity: 1 };
+  const spinnerInlineStyle = loading ? { opacity: 1 } : { opacity: 0 };
 
-  /**
-   * Renders the component.
-   * @return {JSX}
-   */
-  render() {
-    const className = this.props.disabled ? styles.disabled : styles.button;
-
-    let tickIconStyle = `${styles.icon} ${css({
-      top: 15,
-      right: 16,
-    })}`;
-
-    // Depending on the loading prop we only show the spinner or the other way around.
-    const iconOpacity = this.props.loading ? { opacity: 0 } : { opacity: 1 };
-    const spinnerInlineStyle = this.props.loading ? { opacity: 1 } : { opacity: 0 };
-
-    let tickInlineStyle = this.state.showCheckmark === null ? {
+  let tickClassName = cx(classes.icon, classes.tickIcon);
+  let tickInlineStyle = showCheckmark === null
+    ? {
       transform: 'translate3d(0, 300%, 0)',
       ...iconOpacity,
-    } : null;
-
-    if (this.state.showCheckmark) {
-      /**
-       * When checkmark should be shown, we start the spring transition
-       * Tick icon springs in, and cart icon springs out.
-       */
-      tickIconStyle += ` ${styles.springFromBottom}`;
-      /**
-       * After the keyframe animation is done the transform values are reset
-       * We add the inline style to make sure the icons stay where they are even after the animation
-       */
-      tickInlineStyle = {
-        transform: 'translate3d(0, 0, 0)',
-        ...iconOpacity,
-      };
-    } else if (this.state.showCheckmark !== null) {
-      /**
-       * When checkmark should no longer be shown we start the spring out transition.
-       * Tick icon springs out, cart icon spring in.
-       * We don't want a animation when we initially go to the page therefore this only happens
-       * after the user pressed the button.
-       */
-      tickIconStyle += ` ${styles.springToBottom}`;
-      tickInlineStyle = {
-        transform: 'translate3d(0, -300%, 0)',
-        ...iconOpacity,
-      };
     }
+    : null;
 
-    return (
-      <RippleButton
-        type="secondary"
-        disabled={this.props.disabled}
-        rippleClassName={styles.rippleButton}
-        className={`${className} theme__product__add-to-cart-bar__add-to-cart-button`}
-        data-test-id="addToCartBarButton"
-        aria-label="product.add_to_cart"
-        onClick={this.handleAddToCart}
-      >
-        <I18n.Text string="product.add_to_cart" />
-        {this.props.loading &&
-        <div className={styles.spinnerIcon} style={spinnerInlineStyle}>
+  if (showCheckmark) {
+    tickClassName = cx(classes.icon, classes.tickIcon, classes.springFromBottom);
+    tickInlineStyle = {
+      transform: 'translate3d(0, 0, 0)',
+      ...iconOpacity,
+    };
+  } else if (showCheckmark !== null) {
+    tickClassName = cx(classes.icon, classes.tickIcon, classes.springToBottom);
+    tickInlineStyle = {
+      transform: 'translate3d(0, -300%, 0)',
+      ...iconOpacity,
+    };
+  }
+
+  return (
+    <Button
+      color="cta"
+      fullWidth
+      disabled={disabled}
+      className={cx(classes.button, 'theme__product__add-to-cart-bar__add-to-cart-button')}
+      data-test-id="addToCartBarButton"
+      aria-label="product.add_to_cart"
+      onClick={handleAddToCart}
+    >
+      <I18n.Text string="product.add_to_cart" />
+      {loading && (
+        <div className={classes.spinnerIcon} style={spinnerInlineStyle}>
           <IndicatorCircle
-            color={themeConfig.colors.primaryContrast}
+            color={theme.palette.primary.contrastText}
             strokeWidth={5}
-            paused={!this.props.loading}
+            paused={!loading}
           />
         </div>
-        }
-        <div className={tickIconStyle} style={tickInlineStyle}>
-          <TickIcon size={28} />
-        </div>
-      </RippleButton>
-    );
-  }
-}
+      )}
+      <div className={tickClassName} style={tickInlineStyle}>
+        <TickIcon size={28} />
+      </div>
+    </Button>
+  );
+};
 
-export default connect(AddToCartButton);
+AddToCartButton.propTypes = {
+  conditioner: PropTypes.shape().isRequired,
+  options: PropTypes.shape().isRequired,
+  productId: PropTypes.string.isRequired,
+};
+
+export default AddToCartButton;

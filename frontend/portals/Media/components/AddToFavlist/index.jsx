@@ -1,136 +1,112 @@
-import React, { Component } from 'react';
+import React, { useCallback, useRef } from 'react';
 import PropTypes from 'prop-types';
-import I18n from '@shopgate/pwa-common/components/I18n';
-import connectUiShared from '@shopgate/pwa-ui-shared/FavoritesButton/connector';
-import appConfig from '@shopgate/pwa-common/helpers/config';
-import { HeartIcon, HeartOutlineIcon } from '@shopgate/engage/components';
-import connect from './connector';
-import styles from './style';
+import { useSelector, useDispatch } from 'react-redux';
+import { appConfig } from '@shopgate/engage';
+import { i18n } from '@shopgate/engage/core/helpers';
+import { I18n, HeartIcon, HeartOutlineIcon } from '@shopgate/engage/components';
+import { toggleFavoriteWithListChooser } from '@shopgate/engage/favorites';
+import { isCurrentProductOnFavoriteList } from '@shopgate/pwa-common-commerce/favorites/selectors';
+import { makeStyles } from '@shopgate/engage/styles';
+
+const useStyles = makeStyles()(theme => ({
+  button: {
+    marginTop: 10,
+    display: 'block',
+    flexGrow: 1,
+    border: `1px solid ${theme.palette.secondary.main}`,
+    color: theme.palette.secondary.main,
+    fontSize: 16,
+    fontWeight: 700,
+    borderRadius: theme.components.button.borderRadius,
+    width: '100%',
+    outline: 0,
+    transition: 'width 300ms cubic-bezier(0.25, 0.1, 0.25, 1)',
+    padding: '11px 9.6px 13px',
+  },
+  icon: {
+    display: 'inline',
+    marginBottom: -2,
+    marginRight: 5,
+  },
+}));
 
 /**
  * The favorites button component.
+ * @param {Object} props The component props.
+ * @returns {JSX|null}
  */
-class AddToFavlist extends Component {
-  static propTypes = {
-    active: PropTypes.bool,
-    addFavorites: PropTypes.func,
-    'aria-hidden': PropTypes.bool,
-    // When true, button would react on click only once.
-    once: PropTypes.bool,
-    onRippleComplete: PropTypes.func,
-    productId: PropTypes.string,
-    removeFavorites: PropTypes.func,
-    removeThrottle: PropTypes.number,
-    removeWithRelatives: PropTypes.bool,
-  };
+const AddToFavlist = ({
+  productId,
+  once,
+  removeThrottle,
+  removeWithRelatives,
+  'aria-hidden': ariaHidden,
+}) => {
+  const { classes } = useStyles();
+  const dispatch = useDispatch();
+  const active = useSelector(state => isCurrentProductOnFavoriteList(state, { productId }));
+  const clickedOnce = useRef(false);
 
-  /**
-   * Context types definition.
-   * @type {{i18n: shim}}
-   */
-  static contextTypes = {
-    i18n: PropTypes.func,
-  };
-
-  static defaultProps = {
-    active: false,
-    addFavorites: () => {},
-    'aria-hidden': null,
-    once: false,
-    onRippleComplete: () => {},
-    productId: null,
-    removeFavorites: () => {},
-    removeThrottle: 0,
-    removeWithRelatives: false,
-  };
-
-  /**
-   * Construct and init state
-   * @param {Object} props Component props
-   */
-  constructor(props) {
-    super(props);
-    this.clickedOnce = false;
-  }
-
-  /**
-   * Callback for the moment when the ripple animation is done.
-   */
-  onRippleComplete = () => {
-    this.props.onRippleComplete(this.props.active);
-  };
-
-  /**
-   * Returns text for aria-label.
-   * @returns {string}
-   */
-  getLabel() {
-    const { __ } = this.context.i18n();
-    const lang = this.props.active ? 'favorites.remove' : 'favorites.add';
-    return __(lang);
-  }
-
-  /**
-   * Adds or removes a given product ID from the favorite list.
-   * @param {Object} event The click event object.
-   */
-  handleClick = (event) => {
+  const handleClick = useCallback((event) => {
     event.preventDefault();
     event.stopPropagation();
 
-    if (this.props.once && this.clickedOnce) {
+    if (once && clickedOnce.current) {
       return;
     }
 
-    this.clickedOnce = true;
+    clickedOnce.current = true;
 
-    if (!this.props.productId) {
+    if (!productId) {
       return;
     }
 
-    if (!this.props.active) {
-      this.props.addFavorites(this.props.productId);
+    if (!active) {
+      dispatch(toggleFavoriteWithListChooser(productId));
     } else {
       setTimeout(() => {
-        this.props.removeFavorites(this.props.productId, this.props.removeWithRelatives);
-      }, this.props.removeThrottle);
+        dispatch(toggleFavoriteWithListChooser(productId, removeWithRelatives));
+      }, removeThrottle);
     }
-  };
+  }, [once, productId, active, dispatch, removeWithRelatives, removeThrottle]);
 
-  /**
-   * Renders the heart icon as filled or outlined, depending on the favorite button being active.
-   * @returns {JSX}
-   */
-  renderIcon() {
-    if (this.props.active) {
-      return <HeartIcon className={styles.icon} />;
-    }
-
-    return <HeartOutlineIcon className={styles.icon} />;
+  if (!appConfig.hasFavorites) {
+    return null;
   }
 
-  /**
-   * Renders the component.
-   * @returns {JSX|null}
-   */
-  render() {
-    if (!appConfig.hasFavorites) {
-      return null;
-    }
-    return (
-      <button
-        aria-label={this.getLabel()}
-        aria-hidden={this.props['aria-hidden']}
-        className={`ui-shared__favorites-button ${styles.button}`}
-        onClick={this.handleClick}
-        data-test-id="favoriteButton"
-        type="button"
-      >
-        <span>{this.renderIcon()}</span>
-        <I18n.Text string={this.props.active ? 'favorites.remove' : 'favorites.add'} />
-      </button>
-    );
-  }
-}
+  return (
+    <button
+      aria-label={i18n.text(active ? 'favorites.remove' : 'favorites.add')}
+      aria-hidden={ariaHidden}
+      className={`ui-shared__favorites-button ${classes.button}`}
+      onClick={handleClick}
+      data-test-id="favoriteButton"
+      type="button"
+    >
+      <span>
+        {active
+          ? <HeartIcon className={classes.icon} />
+          : <HeartOutlineIcon className={classes.icon} />}
+      </span>
+      <I18n.Text string={active ? 'favorites.remove' : 'favorites.add'} />
+    </button>
+  );
+};
 
-export default connectUiShared(connect(AddToFavlist));
+AddToFavlist.propTypes = {
+  'aria-hidden': PropTypes.bool,
+  once: PropTypes.bool,
+  productId: PropTypes.string,
+  removeThrottle: PropTypes.number,
+  removeWithRelatives: PropTypes.bool,
+};
+
+AddToFavlist.defaultProps = {
+  'aria-hidden': null,
+  once: false,
+  productId: null,
+  removeThrottle: 0,
+  removeWithRelatives: false,
+};
+
+export default AddToFavlist;
